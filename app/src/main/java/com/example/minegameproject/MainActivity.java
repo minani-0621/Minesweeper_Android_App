@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 //                        ((BlockButton)view).breakBlock(view);
 //                    }
 //                });
+
                 // toggleFlag 메서드 테스트
 //                buttons[i][j].setOnClickListener(new View.OnClickListener() {
 //                    @Override
@@ -61,8 +62,11 @@ public class MainActivity extends AppCompatActivity {
                 totalMines--;
             }
         }
+
+
     }
 }
+
 class BlockButton extends Button {
     int x, y; // 버튼 위치
     boolean mine; // 지뢰인지 아닌지
@@ -101,11 +105,11 @@ class BlockButton extends Button {
     public boolean breakBlock(View view) { // 블록을 여는 메소드
         setClickable(false);
         blocks--;
-        if(mine == true) {
+        if(mine == true) { // 블록을 열었는데 지뢰가 있으면 'M'으로 표시
             setText("M");
             return true;
         }
-        else {
+        else { // 블록을 열었는데 지뢰가 없으면 주변 지뢰 수로 표시
             setText(neighborMines);
             setBackgroundColor(Color.WHITE);
             return false;
