@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 buttons[i][j].setLayoutParams(layoutParams);
                 tableRow.addView(buttons[i][j]);
 
-                // breakBlock 메서드 테스트
+                // breakBlock 메서드 테스트 Code
 //                buttons[i][j].setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View view) {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                });
 
-                // toggleFlag 메서드 테스트
+                // toggleFlag 메서드 테스트 Code
 //                buttons[i][j].setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View view) {
