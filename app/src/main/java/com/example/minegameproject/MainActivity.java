@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             if (!buttons[randomX][randomY].mine) {
                 buttons[randomX][randomY].mine = true;
                 totalMines--;
+
                 if((randomX == 0) && (randomY == 0)) { // (0, 0)일때
                     for(int i = 0; i <= 1; i++) {
                         for(int j = 0; j <= 1; j++) {
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if((randomX == 0) && (randomY >= 1 && randomY <= 7)) { // (0, 1~7)일때
                     for(int i = 0; i <= 1; i++) {
-                        for(int j = 0; j <= 2; j++) {
+                        for(int j = -1; j <= 1; j++) {
                             buttons[randomX + i][randomY + j].neighborMines++;
                         }
                     }
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     buttons[randomX][randomY].neighborMines--;
                 }
-                else { // 주변 블록이 8개인 경우
+                else if((randomX >= 1 && randomX <= 7) && (randomY >= 1 && randomY <= 7)) { // 주변 블록이 8개인 경우
                     for(int i = -1; i <= 1; i++) {
                         for(int j = -1; j <= 1; j++) {
                             buttons[randomX + i][randomY + j].neighborMines++;
