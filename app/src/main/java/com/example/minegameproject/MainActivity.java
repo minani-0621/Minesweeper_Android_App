@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.Random;
 
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 buttons[i][j].setLayoutParams(layoutParams);
                 tableRow.addView(buttons[i][j]);
 
+
                 // breakBlock 메서드 테스트 Code
                 buttons[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -44,14 +48,31 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 // toggleFlag 메서드 테스트 Code
-//                buttons[i][j].setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        ((BlockButton)view).toggleFlag();
-//                    }
-//                });
+                buttons[i][j].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((BlockButton)view).toggleFlag();
+
+                        TextView textView = (TextView)findViewById(R.id.textViewMines);
+                        textView.setText("Mines: " + String.valueOf(10 - BlockButton.flags));
+                    }
+                });
             }
         }
+        // 토글 버튼 클릭 이벤트에 따라서 동작 변경
+//        ToggleButton toggleButton = (ToggleButton)findViewById(R.id.toggleButton);
+//        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if(b) {
+//                    Toast.makeText(getApplicationContext(), "Uncover", Toast.LENGTH_SHORT).show();
+//                }
+//                else {
+//                    Toast.makeText(getApplicationContext(), "Flag", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+
         int totalMines = 10; // 지뢰 10개
         Random random = new Random();
         while (totalMines > 0) { // 지뢰 10개 배치
@@ -136,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+
 
     }
 }
