@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity {
                 tableRow.addView(buttons[i][j]);
 
                 // breakBlock 메서드 테스트 Code
-//                buttons[i][j].setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        ((BlockButton)view).breakBlock(view);
-//                    }
-//                });
+                buttons[i][j].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((BlockButton)view).breakBlock(view);
+                    }
+                });
 
                 // toggleFlag 메서드 테스트 Code
 //                buttons[i][j].setOnClickListener(new View.OnClickListener() {
@@ -60,9 +60,81 @@ public class MainActivity extends AppCompatActivity {
             if (!buttons[randomX][randomY].mine) {
                 buttons[randomX][randomY].mine = true;
                 totalMines--;
+                if((randomX == 0) && (randomY == 0)) { // (0, 0)일때
+                    for(int i = 0; i <= 1; i++) {
+                        for(int j = 0; j <= 1; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+                else if((randomX == 0) && (randomY == 8)) { // (0, 8)일때
+                    for(int i = 0; i <= 1; i++) {
+                        for(int j = -1; j <= 0; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+                else if((randomX == 8) && (randomY == 0)) { // (8, 0)일때
+                    for(int i = -1; i <= 0; i++) {
+                        for(int j = 0; j <= 1; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+                else if((randomX == 8) && (randomY == 8)) { // (8, 8)일때
+                    for(int i = -1; i <= 0; i++) {
+                        for(int j = -1; j <= 0; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+                else if((randomX == 0) && (randomY >= 1 && randomY <= 7)) { // (0, 1~7)일때
+                    for(int i = 0; i <= 1; i++) {
+                        for(int j = 0; j <= 2; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+                else if((randomX == 8) && (randomY >= 1 && randomY <= 7)) { // (8, 1~7)일때
+                    for(int i = -1; i <= 0; i++) {
+                        for(int j = -1; j <= 1; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+                else if((randomX >= 1 && randomX <= 7) && (randomY == 0)) { // (1~7, 0)일때
+                    for(int i = -1; i <= 1; i++) {
+                        for(int j = 0; j <= 1; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+                else if((randomX >= 1 && randomX <= 7) && (randomY == 8)) { // (1~7, 8)일때
+                    for(int i = -1; i <= 1; i++) {
+                        for(int j = -1; j <= 0; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+                else { // 주변 블록이 8개인 경우
+                    for(int i = -1; i <= 1; i++) {
+                        for(int j = -1; j <= 1; j++) {
+                            buttons[randomX + i][randomY + j].neighborMines++;
+                        }
+                    }
+                    buttons[randomX][randomY].neighborMines--;
+                }
+
             }
         }
-
 
     }
 }
@@ -110,7 +182,7 @@ class BlockButton extends Button {
             return true;
         }
         else { // 블록을 열었는데 지뢰가 없으면 주변 지뢰 수로 표시
-            setText(neighborMines);
+            setText(String.valueOf(neighborMines));
             setBackgroundColor(Color.WHITE);
             return false;
         }
