@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -21,11 +23,17 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private BlockButton[][] buttons; // buttons 배열 변수를 전역 변수로 선언
+    private long startTime;
+    private boolean timerRunning = false;
+    private Handler handler;
+    private TextView timerTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        handler = new Handler();
+        timerTextView = findViewById(R.id.textViewTime);
         TableLayout table = (TableLayout) findViewById(R.id.tableLayout); //xml에 만들어져있던 TableLayout과 연결
         buttons = new BlockButton[9][9]; // 9x9 버튼 배열 동적 생성
 
@@ -129,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
                 buttons[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (!timerRunning) {
+                            startTime = SystemClock.elapsedRealtime();
+                            startTimer();
+                            timerRunning = true;
+                        }
                         if(toggleButton.isChecked()) { // Flag 모드일 때
                             ((BlockButton)view).toggleFlag(); // toggleFlag() 실행
                             TextView textView = findViewById(R.id.textViewMines);
@@ -141,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         if (BlockButton.blocks == 0) {
                             showWinAlertDialog();
+                            stopTimer();
+                            timerRunning = false;
                         }
                     }
                 });
@@ -185,8 +200,13 @@ public class MainActivity extends AppCompatActivity {
         return x >= 0 && x < 9 && y >= 0 && y < 9;
     }
     private void showWinAlertDialog() {
+        long elapsedTime = SystemClock.elapsedRealtime() - startTime;
+        int minutes = (int) (elapsedTime / 60000);
+        int seconds = (int) (elapsedTime % 60000 / 1000);
+        String timeFormatted = String.format("%02d:%02d", minutes, seconds);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setMessage("You Win!")
+                .setMessage("You Win!\nTime: " + timeFormatted)
                 .setTitle("Congratulations!")
                 .setPositiveButton("Restart", new DialogInterface.OnClickListener() {
                     @Override
@@ -232,6 +252,22 @@ public class MainActivity extends AppCompatActivity {
                 buttons[i][j].setClickable(false);
             }
         }
+    }
+    private void startTimer() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                long elapsedTime = SystemClock.elapsedRealtime() - startTime;
+                int minutes = (int) (elapsedTime / 60000);
+                int seconds = (int) (elapsedTime % 60000 / 1000);
+                String timeFormatted = String.format("%02d:%02d", minutes, seconds);
+                timerTextView.setText("Time: " + timeFormatted);
+                startTimer(); // 자기 자신을 다시 호출하여 일정 시간마다 업데이트
+            }
+        }, 1000); // 1초 간격으로 업데이트
+    }
+    private void stopTimer() {
+        handler.removeCallbacksAndMessages(null);
     }
 
 }
