@@ -12,11 +12,9 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.Random;
@@ -137,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 buttons[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (!timerRunning) {
+                        if (!timerRunning) { // 첫 버튼 클릭 시 타이머 실행
                             startTime = SystemClock.elapsedRealtime();
                             startTimer();
                             timerRunning = true;
@@ -152,9 +150,9 @@ public class MainActivity extends AppCompatActivity {
                                 breakBlock(finalI, finalJ); // breakBlock() 실행
                             }
                         }
-                        if (BlockButton.blocks == 0) {
-                            showWinAlertDialog();
-                            stopTimer();
+                        if (BlockButton.blocks == 0) { // 더 이상 열 수 있는 버튼이 없어서 게임이 종료 되었을 때
+                            showWinAlertDialog(); // 승리 AlretDialog 띄우기
+                            stopTimer(); // 타이머 종료
                             timerRunning = false;
                         }
                     }
@@ -170,8 +168,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(clickedButton.mine == true) { // 버튼을 클릭했는데 지뢰가 있으면
             clickedButton.setText("\uD83D\uDCA3"); // 지뢰 이미티콘으로 표시
-            showLoseAlertDialog();
-            setAllButtonUnClickable();
+            showLoseAlertDialog(); // 패배 AlretDialog 띄우기
+            setAllButtonUnClickable(); // 모든 버튼 안눌리게
+            stopTimer(); // 타이머 종료
+            timerRunning = false;
         }
         else { // 버튼을 클릭했는데 지뢰가 없으면 주변 지뢰 수로 표시
             if(clickedButton.neighborMines == 0) { // 클릭한 버튼의 주변 지뢰 수가 0이면
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             clickedButton.setBackgroundColor(Color.rgb(192, 192, 192));
         }
     }
-    public void openSurroundingBlocks(int x, int y) {
+    public void openSurroundingBlocks(int x, int y) { // 주변 블록 열기
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 int newX = x + i;
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkValidBlock(int x, int y) { // 버튼의 (x, y)좌표의 범위는 (0~8, 0~8)이어야 함
         return x >= 0 && x < 9 && y >= 0 && y < 9;
     }
-    private void showWinAlertDialog() {
+    private void showWinAlertDialog() { // 승리 AlertDialog
         long elapsedTime = SystemClock.elapsedRealtime() - startTime;
         int minutes = (int) (elapsedTime / 60000);
         int seconds = (int) (elapsedTime % 60000 / 1000);
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    private void showLoseAlertDialog() {
+    private void showLoseAlertDialog() { // 패배 AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this) // 게임 종료를 알리는 AlertDialog
                 .setMessage("You Click a Mine Button!")
                 .setTitle("Game Over!")
@@ -246,14 +246,14 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    private void setAllButtonUnClickable() {
+    private void setAllButtonUnClickable() { // 모든 버튼 클릭 안되게
         for(int i = 1; i < 9; i++) {
             for(int j = 1; j < 9; j++) {
                 buttons[i][j].setClickable(false);
             }
         }
     }
-    private void startTimer() {
+    private void startTimer() { // 타이머 시작 후 동적으로 타이머 갱신
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -262,11 +262,11 @@ public class MainActivity extends AppCompatActivity {
                 int seconds = (int) (elapsedTime % 60000 / 1000);
                 String timeFormatted = String.format("%02d:%02d", minutes, seconds);
                 timerTextView.setText("Time: " + timeFormatted);
-                startTimer(); // 자기 자신을 다시 호출하여 일정 시간마다 업데이트
+                startTimer(); // 자기 자신을 재귀호출하여 일정 시간마다 업데이트
             }
-        }, 1000); // 1초 간격으로 업데이트
+        }, 1000); // 1초마다 업데이트
     }
-    private void stopTimer() {
+    private void stopTimer() { // 타이머 종료
         handler.removeCallbacksAndMessages(null);
     }
 
