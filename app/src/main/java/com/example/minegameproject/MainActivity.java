@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -134,23 +135,23 @@ public class MainActivity extends AppCompatActivity {
                 buttons[i][j].setOnClickListener(new View.OnClickListener() { // 각 버튼들의 클릭리스너 지정
                     @Override
                     public void onClick(View view) {
-                        if(!timerRunning) { // 첫 버튼 클릭 시 타이머 실행
-                            startTime = SystemClock.elapsedRealtime();
-                            startTimer(); // 타이머 시작
-                            timerRunning = true;
-                        }
                         if(BlockButton.blocks == 0) { // 더 이상 열 수 있는 버튼이 없어서 게임이 종료 되었을 때
                             showWinAlertDialog(); // 승리 AlretDialog 띄우기
                             stopTimer(); // 타이머 종료
                             timerRunning = false;
                         }
-                        if(toggleButton.isChecked()) { // Flag 모드일 때
+                        else if(toggleButton.isChecked()) { // Flag 모드일 때
                             ((BlockButton)view).toggleFlag(); // toggleFlag() 실행
                             TextView textView = findViewById(R.id.textViewMines);
                             textView.setText("Mines: " + String.valueOf(10 - BlockButton.flags)); // 남은 지뢰수 반영
                         }
                         else if(!toggleButton.isChecked()) { // Uncover 모드일 때
                             if(buttons[finalI][finalJ].flag == false) { // 깃발이 안 꽂혀 있는 버튼일 경우만 Uncover 가능
+                                if(!timerRunning) { // 첫 버튼 클릭 시 타이머 실행
+                                    startTime = SystemClock.elapsedRealtime();
+                                    startTimer(); // 타이머 시작
+                                    timerRunning = true;
+                                }
                                 breakBlock(finalI, finalJ); // breakBlock() 실행
                             }
                         }
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             setAllButtonUnClickable(); // 모든 버튼 안눌리게
             stopTimer(); // 타이머 종료
             timerRunning = false;
+            setToggleButtonUnClicable();
         }
         else { // 버튼을 클릭했는데 지뢰가 없으면 주변 지뢰 수로 표시
             if(clickedButton.neighborMines == 0) { // 클릭한 버튼의 주변 지뢰 수가 0이면
@@ -178,9 +180,15 @@ public class MainActivity extends AppCompatActivity {
             }
             else { // 클릭한 버튼의 주변 지뢰 수가 0이 아니면
                 clickedButton.setText(String.valueOf(clickedButton.neighborMines)); // 클릭한 버튼에 주변 지뢰 수 표시
+                clickedButton.setTypeface(null, Typeface.BOLD);
             }
             clickedButton.setBackgroundColor(Color.rgb(192, 192, 192));
         }
+    }
+    private void setToggleButtonUnClicable() {
+        ToggleButton toggleButton;
+        toggleButton = findViewById(R.id.toggleButton);
+        toggleButton.setClickable(false);
     }
     public void openSurroundingBlocks(int x, int y) { // 주변 버튼 열기
         for (int i = -1; i <= 1; i++) {
@@ -209,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         String timeFormatted = String.format("%02d:%02d", minutes, seconds);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setMessage("You Win!\nTime: " + timeFormatted)
+                .setMessage("10개의 지뢰를 모두 피했습니다! \uD83E\uDD29\nClear Time - " + timeFormatted)
                 .setTitle("Congratulations!")
                 .setPositiveButton("Restart", new DialogInterface.OnClickListener() {
                     @Override
@@ -230,9 +238,9 @@ public class MainActivity extends AppCompatActivity {
     }
     private void showLoseAlertDialog() { // 패배 AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this) // 게임 종료를 알리는 AlertDialog
-                .setMessage("You Click a Mine Button!")
+                .setMessage("지뢰를 눌렀습니다! \uD83D\uDE2D")
                 .setTitle("Game Over!")
-                .setPositiveButton("Restart", new DialogInterface.OnClickListener() { // 앱 재시작
+                .setPositiveButton("다시해보기", new DialogInterface.OnClickListener() { // 앱 재시작
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = getIntent();
@@ -240,7 +248,13 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Exit", new DialogInterface.OnClickListener() { // 앱 종료
+                .setNeutralButton("모든 지뢰 보기", new DialogInterface.OnClickListener() { // 앱 종료
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showAllMine();
+                    }
+                })
+                .setNegativeButton("게임종료", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
@@ -249,9 +263,18 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+    private void showAllMine() {
+        for(int a = 0; a < 9; a++) {
+            for(int b = 0; b < 9; b++) {
+                if(buttons[a][b].mine == true) {
+                    buttons[a][b].setText("\uD83D\uDCA3");
+                }
+            }
+        }
+    }
     private void setAllButtonUnClickable() { // 모든 버튼 클릭 안되게
-        for(int i = 1; i < 9; i++) {
-            for(int j = 1; j < 9; j++) {
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
                 buttons[i][j].setClickable(false);
             }
         }
