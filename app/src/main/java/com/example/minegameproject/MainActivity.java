@@ -135,15 +135,17 @@ public class MainActivity extends AppCompatActivity {
                 buttons[i][j].setOnClickListener(new View.OnClickListener() { // 각 버튼들의 클릭리스너 지정
                     @Override
                     public void onClick(View view) {
-                        if(BlockButton.blocks == 0) { // 더 이상 열 수 있는 버튼이 없어서 게임이 종료 되었을 때
-                            showWinAlertDialog(); // 승리 AlretDialog 띄우기
-                            stopTimer(); // 타이머 종료
-                            timerRunning = false;
-                        }
-                        else if(toggleButton.isChecked()) { // Flag 모드일 때
+                        if(toggleButton.isChecked()) { // Flag 모드일 때
                             ((BlockButton)view).toggleFlag(); // toggleFlag() 실행
                             TextView textView = findViewById(R.id.textViewMines);
                             textView.setText("Mines: " + String.valueOf(10 - BlockButton.flags)); // 남은 지뢰수 반영
+                            if(checkNoRemainBlocks()) { // 만약에 남은 블록이 없다면
+                                showWinAlertDialog();
+                                stopTimer(); // 타이머 종료
+                                timerRunning = false;
+                                setToggleButtonUnClickable();
+                                setAllButtonUnClickable();
+                            }
                         }
                         else if(!toggleButton.isChecked()) { // Uncover 모드일 때
                             if(buttons[finalI][finalJ].flag == false) { // 깃발이 안 꽂혀 있는 버튼일 경우만 Uncover 가능
@@ -159,20 +161,26 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
-
     }
-    public void breakBlock(int x, int y) { // 버튼을 여는 메소드
+    private void breakBlock(int x, int y) { // 버튼을 여는 메소드
         BlockButton clickedButton = buttons[x][y];
         clickedButton.setClickable(false); // 버튼 안 눌리게 설정
         BlockButton.blocks--; // 전체 버튼 수 차감
 
-        if(clickedButton.mine == true) { // 버튼을 클릭했는데 지뢰가 있으면
+        if(clickedButton.mine) { // 버튼을 클릭했는데 지뢰가 있으면
             clickedButton.setText("\uD83D\uDCA3"); // 지뢰 이미티콘으로 표시
             showLoseAlertDialog(); // 패배 AlretDialog 띄우기
             setAllButtonUnClickable(); // 모든 버튼 안눌리게
             stopTimer(); // 타이머 종료
             timerRunning = false;
             setToggleButtonUnClickable();
+        }
+        else if(BlockButton.blocks == 0) { // 더 이상 남은 버튼이 없으면
+            stopTimer(); // 타이머 종료
+            timerRunning = false;
+            setToggleButtonUnClickable();
+            setAllButtonUnClickable();
+            showWinAlertDialog(); // 승리 AlretDialog 띄우기
         }
         else { // 버튼을 클릭했는데 지뢰가 없으면 주변 지뢰 수로 표시
             if(clickedButton.neighborMines == 0) { // 클릭한 버튼의 주변 지뢰 수가 0이면
@@ -190,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         toggleButton = findViewById(R.id.toggleButton);
         toggleButton.setClickable(false);
     }
-    public void openSurroundingBlocks(int x, int y) { // 주변 버튼 열기
+    private void openSurroundingBlocks(int x, int y) { // 주변 버튼 열기
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 int newX = x + i;
@@ -295,6 +303,14 @@ public class MainActivity extends AppCompatActivity {
     private void stopTimer() { // 타이머 종료
         handler.removeCallbacksAndMessages(null);
     }
+    private boolean checkNoRemainBlocks() {
+        if(BlockButton.blocks == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
 }
 
@@ -311,7 +327,7 @@ class BlockButton extends androidx.appcompat.widget.AppCompatButton {
         flag = false;
         neighborMines = 0;
         flags = 0;
-        blocks = 80;
+        blocks = 81;
         TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams( // 버튼의 레이아웃 파라미터를 설정
                 TableLayout.LayoutParams.WRAP_CONTENT,
                 TableLayout.LayoutParams.WRAP_CONTENT,
@@ -326,7 +342,7 @@ class BlockButton extends androidx.appcompat.widget.AppCompatButton {
             flags++;
             blocks--;
         }
-        else if(flag == true) { // 깃발이 꽂혀 있을때
+        else if(flag) { // 깃발이 꽂혀 있을때
             flag = false;
             setText(" ");
             flags--;
