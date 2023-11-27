@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -132,13 +131,18 @@ public class MainActivity extends AppCompatActivity {
             for(int j = 0; j < 9; j++) {
                 int finalI = i;
                 int finalJ = j;
-                buttons[i][j].setOnClickListener(new View.OnClickListener() {
+                buttons[i][j].setOnClickListener(new View.OnClickListener() { // 각 버튼들의 클릭리스너 지정
                     @Override
                     public void onClick(View view) {
-                        if (!timerRunning) { // 첫 버튼 클릭 시 타이머 실행
+                        if(!timerRunning) { // 첫 버튼 클릭 시 타이머 실행
                             startTime = SystemClock.elapsedRealtime();
-                            startTimer();
+                            startTimer(); // 타이머 시작
                             timerRunning = true;
+                        }
+                        if(BlockButton.blocks == 0) { // 더 이상 열 수 있는 버튼이 없어서 게임이 종료 되었을 때
+                            showWinAlertDialog(); // 승리 AlretDialog 띄우기
+                            stopTimer(); // 타이머 종료
+                            timerRunning = false;
                         }
                         if(toggleButton.isChecked()) { // Flag 모드일 때
                             ((BlockButton)view).toggleFlag(); // toggleFlag() 실행
@@ -146,14 +150,9 @@ public class MainActivity extends AppCompatActivity {
                             textView.setText("Mines: " + String.valueOf(10 - BlockButton.flags)); // 남은 지뢰수 반영
                         }
                         else if(!toggleButton.isChecked()) { // Uncover 모드일 때
-                            if(buttons[finalI][finalJ].flag == false) { // 깃발이 안 꽂혀 있는 자리일 경우만 Uncover 가능
+                            if(buttons[finalI][finalJ].flag == false) { // 깃발이 안 꽂혀 있는 버튼일 경우만 Uncover 가능
                                 breakBlock(finalI, finalJ); // breakBlock() 실행
                             }
-                        }
-                        if (BlockButton.blocks == 0) { // 더 이상 열 수 있는 버튼이 없어서 게임이 종료 되었을 때
-                            showWinAlertDialog(); // 승리 AlretDialog 띄우기
-                            stopTimer(); // 타이머 종료
-                            timerRunning = false;
                         }
                     }
                 });
@@ -163,8 +162,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void breakBlock(int x, int y) { // 버튼을 여는 메소드
         BlockButton clickedButton = buttons[x][y];
-        clickedButton.setClickable(false);
-        BlockButton.blocks--;
+        clickedButton.setClickable(false); // 버튼 안 눌리게 설정
+        BlockButton.blocks--; // 전체 버튼 수 차감
 
         if(clickedButton.mine == true) { // 버튼을 클릭했는데 지뢰가 있으면
             clickedButton.setText("\uD83D\uDCA3"); // 지뢰 이미티콘으로 표시
@@ -183,15 +182,19 @@ public class MainActivity extends AppCompatActivity {
             clickedButton.setBackgroundColor(Color.rgb(192, 192, 192));
         }
     }
-    public void openSurroundingBlocks(int x, int y) { // 주변 블록 열기
+    public void openSurroundingBlocks(int x, int y) { // 주변 버튼 열기
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 int newX = x + i;
                 int newY = y + j;
-                // 주변 버튼의 좌표가 유효한 범위 내에 있고, 해당 버튼이 클릭되지 않았으면서, 지뢰가 없는 경우
-                if (checkValidBlock(newX, newY) && buttons[newX][newY].isClickable() && buttons[newX][newY].neighborMines == 0) {
-                    breakBlock(newX, newY); // 주변 블록 열기
-                    openSurroundingBlocks(newX, newY); // 재귀 호출로 주변 블록의 주변 블록 열기
+                if (checkValidBlock(newX, newY) && buttons[newX][newY].isClickable()) { // 해당 버튼의 좌표가 유효한 범위 내에 있고, 클릭 되지 않은 상태면
+                    if(buttons[newX][newY].neighborMines != 0) { // 해당 버튼의 주변 지뢰 수가 0이 아닐때
+                        breakBlock(newX, newY); // 해당 버튼만 열기
+                    }
+                    else if(buttons[newX][newY].neighborMines == 0) { // 해당 버튼의 주변 지뢰 수가 0일때
+                        breakBlock(newX, newY); // 해당 버튼 열고
+                        openSurroundingBlocks(newX, newY); // 재귀 호출로 주변 버튼 열기
+                    }
                 }
             }
         }
@@ -272,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
-class BlockButton extends Button {
+class BlockButton extends androidx.appcompat.widget.AppCompatButton {
     int x, y; // 버튼 위치
     boolean mine; // 지뢰인지 아닌지
     boolean flag; // 깃발이 꽂혔는지
@@ -286,7 +289,6 @@ class BlockButton extends Button {
         neighborMines = 0;
         flags = 0;
         blocks = 80;
-        blocks++;
         TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams( // 버튼의 레이아웃 파라미터를 설정
                 TableLayout.LayoutParams.WRAP_CONTENT,
                 TableLayout.LayoutParams.WRAP_CONTENT,
