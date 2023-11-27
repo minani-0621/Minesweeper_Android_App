@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             setAllButtonUnClickable(); // 모든 버튼 안눌리게
             stopTimer(); // 타이머 종료
             timerRunning = false;
-            setToggleButtonUnClicable();
+            setToggleButtonUnClickable();
         }
         else { // 버튼을 클릭했는데 지뢰가 없으면 주변 지뢰 수로 표시
             if(clickedButton.neighborMines == 0) { // 클릭한 버튼의 주변 지뢰 수가 0이면
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             clickedButton.setBackgroundColor(Color.rgb(192, 192, 192));
         }
     }
-    private void setToggleButtonUnClicable() {
+    private void setToggleButtonUnClickable() {
         ToggleButton toggleButton;
         toggleButton = findViewById(R.id.toggleButton);
         toggleButton.setClickable(false);
