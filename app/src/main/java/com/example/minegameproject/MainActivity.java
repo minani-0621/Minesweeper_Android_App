@@ -189,6 +189,30 @@ public class MainActivity extends AppCompatActivity {
             else { // 클릭한 버튼의 주변 지뢰 수가 0이 아니면
                 clickedButton.setText(String.valueOf(clickedButton.neighborMines)); // 클릭한 버튼에 주변 지뢰 수 표시
                 clickedButton.setTypeface(null, Typeface.BOLD);
+                if(clickedButton.neighborMines == 1) {
+                    clickedButton.setTextColor(Color.BLUE);
+                }
+                else if(clickedButton.neighborMines == 2) {
+                    clickedButton.setTextColor(Color.RED);
+                }
+                else if(clickedButton.neighborMines == 3) {
+                    clickedButton.setTextColor(Color.YELLOW);
+                }
+                else if(clickedButton.neighborMines == 4) {
+                    clickedButton.setTextColor(Color.MAGENTA);
+                }
+                else if(clickedButton.neighborMines == 5) {
+                    clickedButton.setTextColor(Color.GREEN);
+                }
+                else if(clickedButton.neighborMines == 6) {
+                    clickedButton.setTextColor(Color.CYAN);
+                }
+                else if(clickedButton.neighborMines == 7) {
+                    clickedButton.setTextColor(Color.DKGRAY);
+                }
+                else if(clickedButton.neighborMines == 8) {
+                    clickedButton.setTextColor(Color.WHITE);
+                }
             }
             clickedButton.setBackgroundColor(Color.rgb(192, 192, 192));
         }
@@ -227,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setMessage("10개의 지뢰를 모두 피했습니다! \uD83E\uDD29\nClear Time - " + timeFormatted)
                 .setTitle("Congratulations!")
-                .setPositiveButton("Restart", new DialogInterface.OnClickListener() {
+                .setPositiveButton("다시해보기", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = getIntent();
@@ -235,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                .setNegativeButton("게임종료", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
@@ -248,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this) // 게임 종료를 알리는 AlertDialog
                 .setMessage("지뢰를 눌렀습니다! \uD83D\uDE2D")
                 .setTitle("Game Over!")
-                .setPositiveButton("다시해보기", new DialogInterface.OnClickListener() { // 앱 재시작
+                .setPositiveButton("재도전", new DialogInterface.OnClickListener() { // 앱 재시작
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = getIntent();
