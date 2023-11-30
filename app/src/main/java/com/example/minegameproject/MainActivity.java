@@ -3,7 +3,6 @@ package com.example.minegameproject;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -55,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         while(totalMines > 0) { // 지뢰 10개 배치
             int randomX = random.nextInt(9); // 9는 X 좌표의 최대 범위
             int randomY = random.nextInt(9); // 9는 Y 좌표의 최대 범위
-            if(!buttons[randomX][randomY].mine) { // 랜덤으로 선택된 버튼에 지뢰가 없으면, 지뢰 배치
-                buttons[randomX][randomY].mine = true;
+            if(!buttons[randomX][randomY].mine) { // 랜덤으로 선택된 버튼에 지뢰가 없으면
+                buttons[randomX][randomY].mine = true; // 지뢰 배치
                 totalMines--;
 
                 if((randomX == 0) && (randomY == 0)) { // (0, 0)일때
@@ -141,20 +140,19 @@ public class MainActivity extends AppCompatActivity {
                             textView.setText("Mines: " + String.valueOf(10 - BlockButton.flags)); // 남은 지뢰수 반영
                             if(checkNoRemainBlocks()) { // 만약에 남은 블록이 없다면
                                 showWinAlertDialog();
-                                stopTimer(); // 타이머 종료
+                                stopTimer();
                                 timerRunning = false;
                                 setToggleButtonUnClickable();
                                 setAllButtonUnClickable();
                             }
-                        }
-                        else if(!toggleButton.isChecked()) { // Uncover 모드일 때
+                        } else if(!toggleButton.isChecked()) { // Uncover 모드일 때
                             if(buttons[finalI][finalJ].flag == false) { // 깃발이 안 꽂혀 있는 버튼일 경우만 Uncover 가능
                                 if(!timerRunning) { // 첫 버튼 클릭 시 타이머 실행
                                     startTime = SystemClock.elapsedRealtime();
-                                    startTimer(); // 타이머 시작
+                                    startTimer();
                                     timerRunning = true;
                                 }
-                                breakBlock(finalI, finalJ); // breakBlock() 실행
+                                breakBlock(finalI, finalJ);
                             }
                         }
                     }
@@ -168,56 +166,46 @@ public class MainActivity extends AppCompatActivity {
         BlockButton.blocks--; // 전체 버튼 수 차감
 
         if(clickedButton.mine) { // 버튼을 클릭했는데 지뢰가 있으면
-            clickedButton.setText("\uD83D\uDCA3"); // 지뢰 이미티콘으로 표시
-            showLoseAlertDialog(); // 패배 AlretDialog 띄우기
-            setAllButtonUnClickable(); // 모든 버튼 안눌리게
-            stopTimer(); // 타이머 종료
+            clickedButton.setText("\uD83D\uDCA3"); // 지뢰 이모티콘으로 표시
+            showLoseAlertDialog();
+            setAllButtonUnClickable();
+            stopTimer();
             timerRunning = false;
             setToggleButtonUnClickable();
-        }
-        else if(BlockButton.blocks == 0) { // 더 이상 남은 버튼이 없으면
-            stopTimer(); // 타이머 종료
+        } else if(BlockButton.blocks == 0) { // 더 이상 남은 버튼이 없으면
+            stopTimer();
             timerRunning = false;
             setToggleButtonUnClickable();
             setAllButtonUnClickable();
-            showWinAlertDialog(); // 승리 AlretDialog 띄우기
-        }
-        else { // 버튼을 클릭했는데 지뢰가 없으면 주변 지뢰 수로 표시
+            showWinAlertDialog();
+        } else { // 버튼을 클릭했는데 지뢰가 없으면 주변 지뢰 수로 표시
             if(clickedButton.neighborMines == 0) { // 클릭한 버튼의 주변 지뢰 수가 0이면
                 openSurroundingBlocks(x, y); // 주변 버튼도 오픈
-            }
-            else { // 클릭한 버튼의 주변 지뢰 수가 0이 아니면
+            } else { // 클릭한 버튼의 주변 지뢰 수가 0이 아니면
                 clickedButton.setText(String.valueOf(clickedButton.neighborMines)); // 클릭한 버튼에 주변 지뢰 수 표시
                 clickedButton.setTypeface(null, Typeface.BOLD);
                 if(clickedButton.neighborMines == 1) {
                     clickedButton.setTextColor(Color.BLUE);
-                }
-                else if(clickedButton.neighborMines == 2) {
+                } else if(clickedButton.neighborMines == 2) {
                     clickedButton.setTextColor(Color.RED);
-                }
-                else if(clickedButton.neighborMines == 3) {
+                } else if(clickedButton.neighborMines == 3) {
                     clickedButton.setTextColor(Color.YELLOW);
-                }
-                else if(clickedButton.neighborMines == 4) {
+                } else if(clickedButton.neighborMines == 4) {
                     clickedButton.setTextColor(Color.MAGENTA);
-                }
-                else if(clickedButton.neighborMines == 5) {
+                } else if(clickedButton.neighborMines == 5) {
                     clickedButton.setTextColor(Color.GREEN);
-                }
-                else if(clickedButton.neighborMines == 6) {
+                } else if(clickedButton.neighborMines == 6) {
                     clickedButton.setTextColor(Color.CYAN);
-                }
-                else if(clickedButton.neighborMines == 7) {
+                } else if(clickedButton.neighborMines == 7) {
                     clickedButton.setTextColor(Color.DKGRAY);
-                }
-                else if(clickedButton.neighborMines == 8) {
+                } else if(clickedButton.neighborMines == 8) {
                     clickedButton.setTextColor(Color.WHITE);
                 }
             }
             clickedButton.setBackgroundColor(Color.rgb(192, 192, 192));
         }
     }
-    private void setToggleButtonUnClickable() {
+    private void setToggleButtonUnClickable() { // 특정 버튼 Unclickable 지정
         ToggleButton toggleButton;
         toggleButton = findViewById(R.id.toggleButton);
         toggleButton.setClickable(false);
@@ -230,8 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 if (checkValidBlock(newX, newY) && buttons[newX][newY].isClickable()) { // 해당 버튼의 좌표가 유효한 범위 내에 있고, 클릭 되지 않은 상태면
                     if(buttons[newX][newY].neighborMines != 0) { // 해당 버튼의 주변 지뢰 수가 0이 아닐때
                         breakBlock(newX, newY); // 해당 버튼만 열기
-                    }
-                    else if(buttons[newX][newY].neighborMines == 0) { // 해당 버튼의 주변 지뢰 수가 0일때
+                    } else if(buttons[newX][newY].neighborMines == 0) { // 해당 버튼의 주변 지뢰 수가 0일때
                         breakBlock(newX, newY); // 해당 버튼 열고
                         openSurroundingBlocks(newX, newY); // 재귀 호출로 주변 버튼 열기
                     }
@@ -295,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    private void showAllMine() {
+    private void showAllMine() { // 모든 지뢰 위치 보여주기
         for(int a = 0; a < 9; a++) {
             for(int b = 0; b < 9; b++) {
                 if(buttons[a][b].mine == true) {
@@ -327,50 +314,11 @@ public class MainActivity extends AppCompatActivity {
     private void stopTimer() { // 타이머 종료
         handler.removeCallbacksAndMessages(null);
     }
-    private boolean checkNoRemainBlocks() {
+    private boolean checkNoRemainBlocks() { // 남은 버튼 아예 없는지 확인
         if(BlockButton.blocks == 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
-        }
-    }
-
-}
-
-class BlockButton extends androidx.appcompat.widget.AppCompatButton {
-    int x, y; // 버튼 위치
-    boolean mine; // 지뢰인지 아닌지
-    boolean flag; // 깃발이 꽂혔는지
-    int neighborMines; // 블록 주변의 지뢰 수
-    static int flags; // 깃발이 꽂힌 블록 수
-    static int blocks; // 남은 블록 수
-    public BlockButton(Context context, int x, int y) { // 생성자
-        super(context);
-        mine = false;
-        flag = false;
-        neighborMines = 0;
-        flags = 0;
-        blocks = 81;
-        TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams( // 버튼의 레이아웃 파라미터를 설정
-                TableLayout.LayoutParams.WRAP_CONTENT,
-                TableLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-        );
-        setLayoutParams(layoutParams);
-    }
-    public void toggleFlag() { // 깃발 꽂기 or 해제 메소드
-        if(!flag && flags < 10) { // 깃발이 없고, 꽂을 수 있는 깃발이 남아 있을때
-            flag = true;
-            setText("\uD83D\uDEA9"); // 깃발 이모티콘으로 표시
-            flags++;
-            blocks--;
-        }
-        else if(flag) { // 깃발이 꽂혀 있을때
-            flag = false;
-            setText(" ");
-            flags--;
-            blocks++;
         }
     }
 }
