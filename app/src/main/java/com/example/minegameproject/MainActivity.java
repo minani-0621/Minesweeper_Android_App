@@ -2,6 +2,8 @@ package com.example.minegameproject;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +13,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -290,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        makeRestartButton();
     }
     private void setAllButtonUnClickable() { // 모든 버튼 클릭 안되게
         for(int i = 0; i < 9; i++) {
@@ -320,5 +326,28 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+    private void makeRestartButton() { // 재시작 버튼 동적 생성 함수
+        ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout);
+        Button restartButton = new Button(this);
+        restartButton.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        restartButton.setText("재도전");
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.topToBottom = findViewById(R.id.toggleButton).getId(); // 토글 버튼의 아래에 위치하도록 설정
+        restartButton.setLayoutParams(layoutParams);
+
+        constraintLayout.addView(restartButton);
     }
 }
