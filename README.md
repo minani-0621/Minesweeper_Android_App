@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="assets/minesweepericon.webp" alt="logo" width="200" height="auto" />
+  <img src="https://github.com/cm2hcm2h/Minesweeper_Android_App/blob/2cb5c3b9e97b90856b59a9c35ca8b48d6e1aa800/minesweepericon.webp" alt="logo" width="100" height="auto" />
   <h1>Minesweeper Android App</h1>
   
   <p>
@@ -29,7 +29,7 @@
 ### 📃: Tech Stack
 |   Java   |   Android   |  AndroidStudio   |
 | :------: | :---------: | :--------------: |
-| ![java]  | ![android]  | ![androidStudio] |
+| <img src="https://github.com/cm2hcm2h/Minesweeper_Android_App/blob/2cb5c3b9e97b90856b59a9c35ca8b48d6e1aa800/javaIcon.png" height="100">  | <img src="https://github.com/cm2hcm2h/Minesweeper_Android_App/blob/2cb5c3b9e97b90856b59a9c35ca8b48d6e1aa800/android.png" height="80"> | <img src="https://github.com/cm2hcm2h/Minesweeper_Android_App/blob/2cb5c3b9e97b90856b59a9c35ca8b48d6e1aa800/androidStudio.png" height="75"> |
 
 
 <!-- Features -->
