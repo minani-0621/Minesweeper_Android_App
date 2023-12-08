@@ -1,10 +1,10 @@
 <div align="center">
 
-  <img src="assets/minesweeperIcon.webp" alt="logo" width="200" height="auto" />
+  <img src="assets/minesweepericon.webp" alt="logo" width="200" height="auto" />
   <h1>Minesweeper Android App</h1>
   
   <p>
-    본 프로젝트는 경기대학교 2023학년도 2학기 모바일프로그래밍(DD731) 수강 중에 개발한 지뢰찾기게임 안드로이드 앱 입니다.
+    본 프로젝트는 경기대학교 2023학년도 2학기 모바일프로그래밍(DD731)를 수강 중에 개발한 지뢰찾기게임 안드로이드 앱 입니다.
   </p>
   
   
@@ -21,7 +21,7 @@
 ### :camera: Screenshots
 
 <div align="center"> 
-  <img src="preview.png" alt="screenshot" />
+  <img src="preview.png" alt="screenshot" width="150px" />
 </div>
 
 
