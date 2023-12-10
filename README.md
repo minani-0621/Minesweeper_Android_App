@@ -20,9 +20,17 @@
 <!-- Screenshots -->
 ### :camera: Screenshots
 
-<div align="center"> 
-  <img src="preview.png" alt="screenshot" width="150px" />
-</div>
+|   Game Playing   |   Defeat   |  Show All Mine   |  Win   |
+| :------: | :---------: | :--------------: | :--------------: |
+| <img src="preview.png" alt="screenshot" width="300px" /> | <img src="defeat.png" alt="defeat screenshot" width="300px" /> | <img src="showAllMine.png" alt="showAllMine screenshot" width="300px" /> | <img src="winning.png" alt="winning screenshot" width="300px" /> |
+|   게임 플레이 도중입니다   |   지뢰를 클릭하면<br>패배 메시지가 뜹니다   |  패배한 후 모든 지뢰 위치를<br>확인해 볼 수 있습니다.   |  모든 지뢰를 피해서 블록을<br>다 깨면 승리 메시지가 뜹니다   |
+
+
+
+
+
+
+
 
 
 <!-- TechStack -->
