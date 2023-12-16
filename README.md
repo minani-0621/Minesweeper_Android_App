@@ -22,8 +22,8 @@
 
 |   Game Playing   |   Defeat   |  Show All Mine   |  Win   |
 | :------: | :---------: | :--------------: | :--------------: |
-| <img src="preview.png" alt="screenshot" weight="25%" /> | <img src="defeat.png" alt="defeat screenshot" weight="25%" /> | <img src="showAllMine.png" alt="showAllMine screenshot" weight="25%" /> | <img src="winning.png" alt="winning screenshot" weight="25%" /> |
-|   게임 플레이 도중입니다   |   지뢰를 클릭하면 패배 메시지가 뜹니다   |  패배한 후 모든 지뢰 위치를 확인해 볼 수 있습니다.   |  모든 지뢰를 피해서 블록을 다 깨면 승리 메시지가 뜹니다   |
+| <img src="gamePlaying.png" alt="gamePlaying screenshot" weight="25%" /> | <img src="defeat.png" alt="defeat screenshot" weight="25%" /> | <img src="showAllMine.png" alt="showAllMine screenshot" weight="25%" /> | <img src="win.png" alt="win screenshot" weight="25%" /> |
+| 게임 플레이 도중입니다 | 지뢰를 클릭하면 패배 메시지가 뜹니다 | 패배한 후 모든 지뢰 위치를 확인해 볼 수 있습니다 | 모든 지뢰를 피해서 블록을 다 깨면 승리 메시지가 뜹니다 |
 
 
 
